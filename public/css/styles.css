@@ -1,6 +1,174 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap');
 /******* Change Box Model ***************/
 *,
 *:before,
 *:after {
   box-sizing: border-box;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+}
+
+#top-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+}
+
+#top-header a {
+  color: #1a1a1a;
+  text-decoration: none;
+}
+
+.siteName a {
+  font-size: 36px;
+  font-weight: 600;
+}
+
+#tools a {
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+nav {
+  background-color: #232323; /* Slightly softer black */
+  color: #ffffff;
+  padding: 10px 0;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 20px;
+  line-height: 0;
+  font-size: 18px;
+}
+
+nav a {
+  font-weight: 600;
+  color: #ffffff;
+  text-decoration: none;
+}
+
+#hero {
+  height: 400px;
+  background: center center no-repeat url("../images/vehicles/delorean.jpg");
+}
+
+#hero h1 {
+  font-size: 32px;
+  font-weight: 600;
+}
+
+#overlay {
+  margin-top: 80px;
+  position: relative;
+  background-color: #c2c2c2; /* Adjusted for better contrast */
+  opacity: 0.7;
+  max-width: 250px;
+  height: 150px;
+}
+
+#overlay-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  height: auto;
+  transform: translate(-50%, -50%);
+  padding: 20px;
+  border-radius: 10px;
+}
+
+#overlay-content a img {
+  width: 150px;
+  height: 50px;
+}
+
+#overlay-content h2 {
+  font-size: 22px;
+}
+
+#overlay-content p {
+  font-size: 15px;
+  color: #1a1a1a;
+}
+
+#info {
+  display: flex;
+  flex-direction: column;
+  padding: 0 10px;
+}
+
+#reviews {
+  line-height: 2;  
+}
+
+#reviews h2, #upgrades h2 {
+  font-size: 32px;
+}
+
+#reviews li {
+  font-size: 20px;
+}
+
+#upgrades {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+#upgrades h2 {
+  grid-column:  3/1;
+}
+
+.item-image {
+  background-color: #3e7b94; /* Improved accessibility & contrast */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
+  padding: 20px;
+  min-height: 150px;
+  width: auto;
+}
+
+
+.item a {    
+  font-weight: 600;
+  font-size: 18px;  
+  display: flex;  
+  justify-content: center;
+}
+
+@media screen and (min-width: 960px) {
+  body {
+    background-image: url('../images/site/checkerboard.jpg');    
+  }
+
+  body, #wrapper {
+    margin: 20px 80px;
+    background-color: #ffffff;
+  }
+
+  #info {
+    flex-direction: row;
+  }
+
+   .item-image {
+    width: 200px;
+  }
+
+  #wrapper {
+  border-radius: 10px;
+  border: 5px solid #2c5b6e; /* Slightly darker teal for border */
+  padding: 10px;
+}
+
+  #overlay {    
+    max-width: 260px;
+    height: 160px;
+  }
 }
