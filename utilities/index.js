@@ -1,6 +1,7 @@
 const invModel = require("../models/inventory-model")
 const Util = {}
 
+
 /* ************************
  * Constructs the nav HTML unordered list
  ************************** */
@@ -65,4 +66,7 @@ function handleErrors(fn) {
 }
 
 
-module.exports = Util
+module.exports = {
+  ...Util,
+  handleErrors
+}
