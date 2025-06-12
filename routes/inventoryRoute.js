@@ -7,16 +7,19 @@ const invValidation = require("../utilities/inventory-validation")
 router.get("/type/:classificationId", invController.buildByClassificationId);
 
 // Route to build the management view
-router.get("/", invController.buildManagement)
+router.get("/", invController.buildManagement);
 
 // Route to build inventory by classification view
-router.get("/type/:classificationId", invController.buildByClassificationId)
+router.get("/type/:classificationId", invController.buildByClassificationId);
+
+// Route for vehicle detail view
+router.get("/detail/:invId", invController.buildDetailView);
 
 // Show add-classification form
-router.get("/add-classification", invController.showAddClassification)
+router.get("/add-classification", invController.showAddClassification);
 
 // Show add-inventory form
-router.get("/add-inventory", invController.showAddInventory)
+router.get("/add-inventory", invController.showAddInventory);
 
 // Handle form submission
 router.post(
@@ -32,5 +35,6 @@ router.post(
   invValidation.checkInventoryData,
   invController.addInventory
 )
+
 
 module.exports = router;

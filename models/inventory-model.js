@@ -8,8 +8,16 @@ async function getClassifications(){
 }
 
 
-// Export the function
-module.exports = {getClassifications}
+async function getInventoryById(invId) {
+  try {
+    const sql = "SELECT * FROM inventory WHERE inv_id = $1";
+    const data = await pool.query(sql, [invId]);
+    return data.rows[0];
+  } catch (error) {
+    throw error;
+  }
+}
+
 
 /* ***************************
  *  Get all inventory items and classification_name by classification_id
@@ -67,4 +75,4 @@ async function insertInventory(data) {
 }
 
 // Export the function
-module.exports = {getClassifications, getInventoryByClassificationId, insertClassification};
+module.exports = {getClassifications, getInventoryById, getInventoryByClassificationId, insertClassification};

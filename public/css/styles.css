@@ -211,6 +211,54 @@ a:hover {
     text-align: center;
 }
 
+.vehicle-detail-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  margin: 2rem auto;
+  max-width: 900px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  padding: 2rem;
+}
+.vehicle-detail-image {
+  flex: 1 1 300px;
+  min-width: 250px;
+  max-width: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.vehicle-detail-image img {
+  width: 100%;
+  height: auto;
+  border-radius: 6px;
+  object-fit: cover;
+}
+.vehicle-detail-info {
+  flex: 2 1 350px;
+  min-width: 250px;
+}
+.vehicle-detail-info h2 {
+  margin-top: 0;
+  font-size: 2rem;
+}
+.vehicle-detail-section {
+  margin: 1rem 0;
+  font-size: 1.1rem;
+}
+@media (max-width: 700px) {
+  .vehicle-detail-container {
+    flex-direction: column;
+    padding: 1rem;
+  }
+  .vehicle-detail-image, .vehicle-detail-info {
+    min-width: 0;
+    max-width: 100%;
+  }
+}
+
 @media screen and (min-width: 960px) {
   body {
     background-image: url('../images/site/checkerboard.jpg');    

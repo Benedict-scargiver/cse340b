@@ -26,6 +26,38 @@ Util.getNav = async function (req, res, next) {
   return list
 }
 
+
+
+function buildDetailHtml(vehicle) {
+  if (!vehicle) return "<p>Vehicle not found.</p>";
+  // Format price and miles
+  const price = Number(vehicle.inv_price).toLocaleString("en-US", { style: "currency", currency: "USD" });
+  const miles = Number(vehicle.inv_miles).toLocaleString("en-US");
+  return `
+    <div class="vehicle-detail-container">
+      <div class="vehicle-detail-image">
+        <img src="${vehicle.inv_image}" alt="Image of ${vehicle.inv_year} ${vehicle.inv_make} ${vehicle.inv_model}">
+      </div>
+      <div class="vehicle-detail-info">
+        <h2>${vehicle.inv_year} ${vehicle.inv_make} ${vehicle.inv_model}</h2>
+        <div class="vehicle-detail-section">
+          <strong>Price:</strong> ${price}
+        </div>
+        <div class="vehicle-detail-section">
+          <strong>Description:</strong> ${vehicle.inv_description}
+        </div>
+        <div class="vehicle-detail-section">
+          <strong>Color:</strong> ${vehicle.inv_color}
+        </div>
+        <div class="vehicle-detail-section">
+          <strong>Miles:</strong> ${miles}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+
 /* **************************************
 * Build the classification view HTML
 * ************************************ */
@@ -68,5 +100,6 @@ function handleErrors(fn) {
 
 module.exports = {
   ...Util,
-  handleErrors
-}
+  handleErrors,
+  buildDetailHtml,
+};
