@@ -75,4 +75,4 @@ async function insertInventory(data) {
 }
 
 // Export the function
-module.exports = {getClassifications, getInventoryById, getInventoryByClassificationId, insertClassification};
+module.exports = {getClassifications, getInventoryById, getInventoryByClassificationId, insertClassification, insertInventory};

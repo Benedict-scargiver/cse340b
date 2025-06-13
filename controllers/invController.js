@@ -7,15 +7,22 @@ const invCont = {}
 invCont.buildByClassificationId = async function (req, res, next) {
   const classification_id = req.params.classificationId
   const data = await invModel.getInventoryByClassificationId(classification_id)
-  const grid = await utilities.buildClassificationGrid(data)
   let nav = await utilities.getNav()
-  const className = data[0].classification_name
+  let className = "No Vehicles Found"
+  let grid = ""
+  if (data && data.length > 0) {
+    className = data[0].classification_name
+    grid = await utilities.buildClassificationGrid(data)
+  } else {
+    grid = "<p class='notice'>No vehicles found for this classification.</p>"
+  }
   res.render("./inventory/classification", {
     title: className + " vehicles",
     nav,
     grid,
   })
 }
+
 
 // Build detail view
 invCont.buildDetailView = async function (req, res, next) {
@@ -115,7 +122,7 @@ invCont.showAddInventory = async function (req, res) {
 }
 
 // Add inventory
-invCont.addInventory = async function (req, res) {
+/*invCont.addInventory = async function (req, res) {
   const nav = await utilities.getNav()
   const classificationList = await utilities.buildClassificationList(req.body.classification_id)
   const errors = req.errors || []
@@ -146,6 +153,44 @@ invCont.addInventory = async function (req, res) {
       ...req.body
     })
   }
+}*/
+
+invCont.addInventory = async function (req, res) {
+  const nav = await utilities.getNav()
+  const classificationList = await utilities.buildClassificationList(req.body.classification_id)
+  const errors = req.errors || []
+  if (errors.length > 0) {
+    return res.render("inventory/add-inventory", {
+      title: "Add New Vehicle",
+      nav,
+      classificationList,
+      messages: [],
+      errors,
+      ...req.body
+    })
+  }
+  try {
+    // Add logging to debug
+    console.log("Add Inventory req.body:", req.body)
+    const result = await invModel.insertInventory(req.body)
+    console.log("Insert result:", result)
+    if (result) {
+      req.flash("info", "Vehicle added successfully!")
+      return res.redirect("/inv") // management view
+    }
+    throw new Error("Insert failed")
+  } catch (err) {
+    // Log the error for debugging
+    console.error("Insert error:", err)
+    res.render("inventory/add-inventory", {
+      title: "Add New Vehicle",
+      nav,
+      classificationList,
+      messages: [],
+      errors: [{ msg: "Failed to add vehicle. Please try again." }],
+      ...req.body
+    })
+  }
 }
 
-module.exports = invCont;
+module.exports =  invCont;

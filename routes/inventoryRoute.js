@@ -18,8 +18,8 @@ router.get("/detail/:invId", invController.buildDetailView);
 // Show add-classification form
 router.get("/add-classification", invController.showAddClassification);
 
-// Show add-inventory form
-router.get("/add-inventory", invController.showAddInventory);
+
+router.get("/add-inventory", invController.showAddInventory)
 
 // Handle form submission
 router.post(
@@ -33,7 +33,8 @@ router.post(
   "/add-inventory",
   invValidation.inventoryRules(),
   invValidation.checkInventoryData,
-  invController.addInventory
+  invController.addInventory,
+  invController.showAddInventory
 )
 
 
