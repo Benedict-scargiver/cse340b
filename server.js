@@ -11,12 +11,14 @@ const app = express()
 const static = require("./routes/static")
 const expressLayouts = require("express-ejs-layouts")
 const baseController = require("./controllers/baseController")
+const utilities = require("./utilities/")
 const inventoryRoute = require("./routes/inventoryRoute")
 const session = require("express-session")
 const pool = require('./database/')
 const accountRoute = require("./routes/accountRoute");
 const bodyParser = require("body-parser")
 const flash = require("connect-flash")
+const cookieParser = require("cookie-parser")
  
 
 /* ***********************
@@ -37,6 +39,14 @@ app.use(session({
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
+//login middleware
+app.use(cookieParser())
+
+// Middleware to check JWT token validity
+app.use(utilities.checkJWTToken)
+ 
+
+
 // Flash middleware
 app.use(flash())
 
