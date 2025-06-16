@@ -2,6 +2,8 @@ const utilities = require("../utilities");
 const accountModel = require("../models/account-model");
 const jwt = require("jsonwebtoken")
 require("dotenv").config()
+const bcrypt = require("bcrypt");
+
 
 /* ****************************************
 *  Deliver login view
@@ -69,7 +71,7 @@ async function registerAccount(req, res) {
 /* ****************************************
  *  Process login request
  * ************************************ */
-async function accountLogin(req, res) {
+/*async function accountLogin(req, res) {
   let nav = await utilities.getNav()
   const { account_email, account_password } = req.body
   const accountData = await accountModel.getAccountByEmail(account_email)
@@ -106,7 +108,58 @@ async function accountLogin(req, res) {
   } catch (error) {
     throw new Error('Access Forbidden')
   }
+}*/
+
+async function accountLogin(req, res) {
+  let nav = await utilities.getNav()
+  const { account_email, account_password } = req.body
+  console.log("Login attempt for:", account_email);
+
+  const accountData = await accountModel.getAccountByEmail(account_email)
+  console.log("Account data from DB:", accountData);
+
+  if (!accountData) {
+    console.log("No account found for email:", account_email);
+    req.flash("notice", "Please check your credentials and try again.")
+    res.status(400).render("account/login", {
+      title: "Login",
+      nav,
+      errors: null,
+      account_email,
+    })
+    return
+  }
+  try {
+    console.log("Comparing passwords...");
+    const match = await bcrypt.compare(account_password, accountData.account_password);
+    console.log("Password match result:", match);
+
+    if (match) {
+      delete accountData.account_password
+      const accessToken = jwt.sign(accountData, process.env.ACCESS_TOKEN_SECRET, { expiresIn: 3600 * 1000 })
+      console.log("JWT generated:", accessToken.slice(-10)); // Show last 10 chars for reference
+      if(process.env.NODE_ENV === 'development') {
+        res.cookie("jwt", accessToken, { httpOnly: true, maxAge: 3600 * 1000 })
+      } else {
+        res.cookie("jwt", accessToken, { httpOnly: true, secure: true, maxAge: 3600 * 1000 })
+      }
+      return res.redirect("/account/")
+    }
+    else {
+      console.log("Password did not match for:", account_email);
+      req.flash("notice", "Please check your credentials and try again.")
+      res.status(400).render("account/login", {
+        title: "Login",
+        nav,
+        errors: null,
+        account_email,
+      })
+    }
+  } catch (error) {
+    console.log("Error during login:", error);
+    throw new Error('Access Forbidden')
+  }
 }
 
-module.exports = { buildLogin, buildRegister, registerAccount };
+module.exports = { buildLogin, buildRegister, registerAccount, accountLogin };
 
