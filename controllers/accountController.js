@@ -41,11 +41,14 @@ async function registerAccount(req, res) {
   let nav = await utilities.getNav()
   const { account_firstname, account_lastname, account_email, account_password } = req.body
 
+  // Hash the password before saving
+  const hashedPassword = await bcrypt.hash(account_password, 10);
+
   const regResult = await accountModel.registerAccount(
     account_firstname,
     account_lastname,
     account_email,
-    account_password
+    hashedPassword // Use the hashed password
   )
 
   if (regResult) {
@@ -68,6 +71,14 @@ async function registerAccount(req, res) {
   }
 }
 
+async function buildAccount(req, res, next) {
+  let nav = await utilities.getNav();
+  res.render("account/account", {
+    title: "Account",
+    nav,
+    errors: null,
+  });
+}
 /* ****************************************
  *  Process login request
  * ************************************ */
@@ -160,6 +171,20 @@ async function accountLogin(req, res) {
     throw new Error('Access Forbidden')
   }
 }
+// Build the Classification List
 
-module.exports = { buildLogin, buildRegister, registerAccount, accountLogin };
+
+async function buildAccount(req, res, next) {
+  let nav = await utilities.getNav();
+  let classSelect = await utilities.buildClassificationList(); // returns <option>...</option>
+  res.render("account/management", {
+    title: "Account Management",
+    nav,
+    classSelect, // Pass to the view
+    errors: null,
+    messages: () => req.flash("notice")
+  });
+}
+
+module.exports = { buildLogin, buildRegister, registerAccount, accountLogin, buildAccount };
 

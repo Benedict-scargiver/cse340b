@@ -2,7 +2,6 @@ const express = require("express")
 const router = express.Router()
 const utilities = require("../utilities")
 const accountController = require("../controllers/accountController")
-const { handleErrors, checkLogin } = require("../utilities");
 const regValidate = require('../utilities/account-validation')
 
 

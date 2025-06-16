@@ -74,5 +74,15 @@ async function insertInventory(data) {
   }
 }
 
+
+async function getClassificationOptions(selectedId = null) {
+  let data = await invModel.getClassifications();
+  let options = '<option value="">-- Select a classification --</option>';
+  data.rows.forEach((row) => {
+    options += `<option value="${row.classification_id}"${selectedId == row.classification_id ? " selected" : ""}>${row.classification_name}</option>`;
+  });
+  return options;
+}
+
 // Export the function
-module.exports = {getClassifications, getInventoryById, getInventoryByClassificationId, insertClassification, insertInventory};
+module.exports = {getClassifications, getInventoryById, getInventoryByClassificationId, insertClassification, insertInventory, getClassificationOptions};

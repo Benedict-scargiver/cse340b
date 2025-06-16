@@ -113,6 +113,15 @@ async function buildClassificationList(selectedId = null) {
   return list;
 }
 
+Util.buildClassificationList = async function(selectedId = null) {
+  const data = await invModel.getClassifications();
+  let list = "";
+  data.rows.forEach(classification => {
+    list += `<option value="${classification.classification_id}"${selectedId == classification.classification_id ? " selected" : ""}>${classification.classification_name}</option>`;
+  });
+  return list;
+};
+
 /* ****************************************
 * Middleware to check token validity
 **************************************** */
@@ -148,22 +157,13 @@ Util.checkLogin = (req, res, next) => {
   }
 };
 
-/* ****************************************
- *  Check Login
- * ************************************ */
- Util.checkLogin = (req, res, next) => {
-  if (res.locals.loggedin) {
-    next()
-  } else {
-    req.flash("notice", "Please log in.")
-    return res.redirect("/account/login")
-  }
- }
+
+
 
 
 module.exports = {
   ...Util,
   handleErrors,
   buildDetailHtml,
-  buildClassificationList
+  buildClassificationList,
 };
