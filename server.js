@@ -87,9 +87,9 @@ app.use("/account", accountRoute);
 app.use(async (err, req, res, next) => {
   console.error(err.stack);
   const nav = await utilities.getNav();
-  res.status(500).render("error/error", { 
-    title: "Server Error", 
-    message: "Something went wrong! (500 error)", 
+  res.status(500).render("error/error", {
+    title: "Server Error",
+    message: "Something went wrong! (500 error)",
     error: err,
     nav // <-- pass nav here
   });

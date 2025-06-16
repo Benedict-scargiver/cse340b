@@ -1,3 +1,7 @@
-<h1><%= title %></h1>
-<p><%= message %></p>
-<pre><%= error.message %></pre>
+<% if(title) { %>
+  <h1><%= title %></h1>
+  <p><%= message %></p>
+  <pre><%= error.message %></pre>
+<% } else { %>
+  <% res.redirect('/') %>
+<% } %>
