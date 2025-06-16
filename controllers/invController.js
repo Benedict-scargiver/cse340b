@@ -3,6 +3,13 @@ const utilities = require("../utilities/")
 
 const invCont = {}
 
+
+invCont.brokenRoute = async function (req, res, next) {
+  // Intentionally throw an error
+  throw new Error("Intentional 500 error for demonstration purposes.");
+};
+
+
 // Build inventory by classification view
 invCont.buildByClassificationId = async function (req, res, next) {
   const classification_id = req.params.classificationId

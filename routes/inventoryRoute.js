@@ -1,9 +1,14 @@
 // Needed Resources 
 const express = require("express")
 const router = new express.Router() 
+const utilities = require("../utilities");
 const invController = require("../controllers/invController")
 const invValidation = require("../utilities/inventory-validation")
 const { handleErrors } = require("../utilities");
+
+
+// Intentional error route
+router.get("/broken", utilities.handleErrors(invController.brokenRoute));
 
 // Route to build inventory by classification view
 router.get("/type/:classificationId", invController.buildByClassificationId);

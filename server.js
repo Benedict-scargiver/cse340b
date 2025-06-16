@@ -2,6 +2,7 @@
  * This server.js file is the primary file of the 
  * application. It is used to control the project.
  *******************************************/
+
 /* ***********************
  * Require Statements
  *************************/
@@ -37,6 +38,8 @@ app.use(session({
 }))
 
 
+
+
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 //login middleware
@@ -56,6 +59,7 @@ app.use(function(req, res, next){
   res.locals.messages = require('express-messages')(req, res)
   next()
 })
+
 
 
 /* ***********************
@@ -79,6 +83,17 @@ app.use("/inv", inventoryRoute)
 // Use the Account Route
 app.use("/account", accountRoute);
 
+
+app.use(async (err, req, res, next) => {
+  console.error(err.stack);
+  const nav = await utilities.getNav();
+  res.status(500).render("error/error", { 
+    title: "Server Error", 
+    message: "Something went wrong! (500 error)", 
+    error: err,
+    nav // <-- pass nav here
+  });
+});
 
 /* ***********************
  * Local Server Information
