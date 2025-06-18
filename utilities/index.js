@@ -121,24 +121,22 @@ Util.buildClassificationList = async function(selectedId = null) {
 /* ****************************************
 * Middleware to check token validity
 **************************************** */
-Util.checkJWTToken = (req, res, next) => {
- if (req.cookies.jwt) {
-  jwt.verify(
-   req.cookies.jwt,
-   process.env.ACCESS_TOKEN_SECRET,
-   function (err, accountData) {
-    if (err) {
-     req.flash("Please log in")
-     res.clearCookie("jwt")
-     return res.redirect("/account/login")
+function checkJWTToken(req, res, next) {
+  const token = req.cookies.jwt;
+  if (token) {
+    try {
+      const accountData = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+      res.locals.loggedin = true;
+      res.locals.accountData = accountData;
+    } catch (error) {
+      res.locals.loggedin = false;
+      res.locals.accountData = null;
     }
-    res.locals.accountData = accountData
-    res.locals.loggedin = 1
-    next()
-   })
- } else {
-  next()
- }
+  } else {
+    res.locals.loggedin = false;
+    res.locals.accountData = null;
+  }
+  next();
 }
 
 /* ****************************************
@@ -161,5 +159,6 @@ module.exports = {
   ...Util,
   handleErrors,
   buildDetailHtml,
+  checkJWTToken,
   buildClassificationList,
 };

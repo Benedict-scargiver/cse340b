@@ -43,4 +43,6 @@ exports.accountManagement = (req, res) => {
   res.send("You're logged in");
 };
 
+router.get("/logout", utilities.handleErrors(accountController.logoutAccount));
+
 module.exports = router
