@@ -101,16 +101,12 @@ function handleErrors(fn) {
 }
 
 async function buildClassificationList(selectedId = null) {
-  // Fetch classifications from your model
-  const invModel = require("../models/inventory-model");
-  const classifications = await invModel.getClassifications();
-  let list = '<select name="classification_id" id="classification_id" required>';
-  list += '<option value="">Choose a Classification</option>';
-  classifications.rows.forEach(c => {
-    list += `<option value="${c.classification_id}"${selectedId == c.classification_id ? " selected" : ""}>${c.classification_name}</option>`;
+  let data = await invModel.getClassifications();
+  let options = '<option value="">Choose a Classification</option>';
+  data.rows.forEach((row) => {
+    options += `<option value="${row.classification_id}"${selectedId == row.classification_id ? " selected" : ""}>${row.classification_name}</option>`;
   });
-  list += "</select>";
-  return list;
+  return options;
 }
 
 Util.buildClassificationList = async function(selectedId = null) {

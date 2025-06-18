@@ -28,6 +28,9 @@ router.get("/add-classification", invController.showAddClassification);
 
 router.get("/add-inventory", invController.showAddInventory)
 
+// Route for editing a vehicle by inventory ID
+router.get("/edit/:invId", invController.editInventoryView);
+
 // Handle form submission
 router.post(
   "/add-classification",
@@ -48,5 +51,16 @@ router.get(
   "/getInventory/:classification_id",
   handleErrors(invController.getInventoryJSON)
 )
+
+
+router.post(
+  "/update",
+  invValidation.newInventoryRules(),
+  invValidation.checkUpdateData,
+  invController.updateInventory
+)
+
+router.get("/delete/:inv_id", utilities.checkLogin, utilities.handleErrors(invController.buildVehicleDeleteConfirm));
+router.post("/delete", utilities.checkLogin, utilities.handleErrors(invController.deleteVehicle));
 
 module.exports = router;

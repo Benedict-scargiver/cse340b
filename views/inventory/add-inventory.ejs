@@ -23,8 +23,10 @@
 <form class="form addvehicle-form" method="post" action="/inv/add-inventory" novalidate>
   <p>*All fields are required</p>
   <fieldset class="form--fieldset addvehicle-form--fieldset">
-    <label for="classification_id">Classification:</label>
+    <select id="classification_id" name="classification_id" required>
     <%- classificationList %>
+    </select>
+
 
     <label for="inv_make">Make:</label>
     <input type="text" id="inv_make" name="inv_make" placeholder="Min of 3 characters"
