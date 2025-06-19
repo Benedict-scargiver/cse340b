@@ -6,61 +6,64 @@ const invController = require("../controllers/invController")
 const invValidation = require("../utilities/inventory-validation")
 const { handleErrors } = require("../utilities");
 
-
 // Intentional error route
 router.get("/broken", utilities.handleErrors(invController.brokenRoute));
 
-// Route to build inventory by classification view
-router.get("/type/:classificationId", invController.buildByClassificationId);
+// Management view
+router.get("/", handleErrors(invController.buildManagement));
 
-// Route to build the management view
-router.get("/", invController.buildManagement);
+// Inventory by classification view
+router.get("/type/:classificationId", handleErrors(invController.buildByClassificationId));
 
-// Route to build inventory by classification view
-router.get("/type/:classificationId", invController.buildByClassificationId);
+// Vehicle detail view
+router.get("/detail/:invId", handleErrors(invController.buildDetailView));
 
-// Route for vehicle detail view
-router.get("/detail/:invId", invController.buildDetailView);
+// Show add-classification form (admin only)
+router.get("/add-classification", utilities.inventoryAdminOnly, handleErrors(invController.showAddClassification));
 
-// Show add-classification form
-router.get("/add-classification", invController.showAddClassification);
-
-
-router.get("/add-inventory", invController.showAddInventory)
-
-// Route for editing a vehicle by inventory ID
-router.get("/edit/:invId", invController.editInventoryView);
-
-// Handle form submission
+// Add classification (admin only)
 router.post(
   "/add-classification",
+  utilities.inventoryAdminOnly,
   invValidation.classificationRules(),
   invValidation.checkClassificationData,
-  invController.addClassification
-)
+  handleErrors(invController.addClassification)
+);
 
+// Show add-inventory form (admin only)
+router.get("/add-inventory", utilities.inventoryAdminOnly, handleErrors(invController.showAddInventory));
+
+// Add inventory (admin only)
 router.post(
   "/add-inventory",
-  invValidation.inventoryRules(),
+  utilities.inventoryAdminOnly,
+  invValidation.newInventoryRules(),
   invValidation.checkInventoryData,
-  invController.addInventory,
-  invController.showAddInventory
-)
+  handleErrors(invController.addInventory)
+);
 
+// Edit inventory view (admin only)
+router.get("/edit/:invId", utilities.inventoryAdminOnly, handleErrors(invController.editInventoryView));
+
+// Update inventory (admin only)
+router.post(
+  "/update",
+  utilities.inventoryAdminOnly,
+  invValidation.newInventoryRules(),
+  invValidation.checkUpdateData,
+  handleErrors(invController.updateInventory)
+);
+
+// Get inventory JSON for classification (AJAX)
 router.get(
   "/getInventory/:classification_id",
   handleErrors(invController.getInventoryJSON)
-)
+);
 
+// Delete vehicle confirmation (admin only)
+router.get("/delete/:inv_id", utilities.inventoryAdminOnly, handleErrors(invController.buildVehicleDeleteConfirm));
 
-router.post(
-  "/update",
-  invValidation.newInventoryRules(),
-  invValidation.checkUpdateData,
-  invController.updateInventory
-)
-
-router.get("/delete/:inv_id", utilities.checkLogin, utilities.handleErrors(invController.buildVehicleDeleteConfirm));
-router.post("/delete", utilities.checkLogin, utilities.handleErrors(invController.deleteVehicle));
+// Delete vehicle (admin only)
+router.post("/delete", utilities.inventoryAdminOnly, handleErrors(invController.deleteVehicle));
 
 module.exports = router;

@@ -34,15 +34,39 @@ router.post(
 )
 
 // Error handling middleware
-router.use((err, req, res, next) => {
+/*router.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).send("Something went wrong!");
-});
+});*/
 
 exports.accountManagement = (req, res) => {
   res.send("You're logged in");
 };
 
+
+// GET: Deliver the account update view
+router.get("/update/:account_id", utilities.checkLogin, utilities.handleErrors(accountController.buildAccountUpdate))
+
+// POST: Process account info update (first name, last name, email)
+router.post(
+  "/accountupdate",
+  regValidate.accountUpdateRules(),
+  regValidate.checkAccountUpdateData,
+  utilities.handleErrors(accountController.accountUpdate)
+)
+
+// POST: Process password update
+router.post(
+  "/changepassword",
+  utilities.checkLogin,
+  regValidate.passwordUpdateRules(),
+  regValidate.checkPasswordUpdateData,
+  utilities.handleErrors(accountController.passwordUpdate)
+)
+
+
 router.get("/logout", utilities.handleErrors(accountController.logoutAccount));
+
+
 
 module.exports = router

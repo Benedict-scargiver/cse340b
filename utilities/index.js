@@ -151,7 +151,48 @@ Util.checkLogin = (req, res, next) => {
   }
 };
 
-
+/**
+ * Middleware to restrict access to inventory admin routes
+ * Only allows "Employee" or "Admin" account types
+ */
+async function inventoryAdminOnly(req, res, next) {
+  try {
+    const token = req.cookies.jwt;
+    if (!token) {
+      req.flash("notice", "You must be logged in to access this page.");
+      return res.status(403).render("account/login", {
+        title: "Login",
+        nav: await require("./index").getNav(),
+        errors: null,
+        messages: req.flash("notice"),
+      });
+    }
+    const accountData = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+    if (
+      accountData.account_type === "Employee" ||
+      accountData.account_type === "Admin"
+    ) {
+      // User is authorized
+      return next();
+    } else {
+      req.flash("notice", "You do not have permission to access this page.");
+      return res.status(403).render("account/login", {
+        title: "Login",
+        nav: await require("./index").getNav(),
+        errors: null,
+        messages: req.flash("notice"),
+      });
+    }
+  } catch (error) {
+    req.flash("notice", "You must be logged in to access this page.");
+    return res.status(403).render("account/login", {
+      title: "Login",
+      nav: await require("./index").getNav(),
+      errors: null,
+      messages: req.flash("notice"),
+    });
+  }
+}
 
 
 
@@ -160,5 +201,6 @@ module.exports = {
   handleErrors,
   buildDetailHtml,
   checkJWTToken,
+  inventoryAdminOnly,
   buildClassificationList,
 };
