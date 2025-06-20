@@ -151,6 +151,34 @@ a:hover {
 
 
 
+/* Style the review form label and textarea */
+form[action="/reviews/add"] label[for="review_text"] {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #17446c;
+  font-size: 1.1em;
+}
+
+form[action="/reviews/add"] textarea#review_text {
+  width: 100%;
+  min-height: 80px;
+  padding: 10px;
+  font-size: 1em;
+  border: 1px solid #c2c2c2;
+  border-radius: 4px;
+  resize: vertical;
+  margin-bottom: 12px;
+  background: #fafbfc;
+  transition: border-color 0.2s;
+}
+
+form[action="/reviews/add"] textarea#review_text:focus {
+  border-color: #17446c;
+  outline: none;
+}
+
+
 .form {
   max-width: 30em;
   margin: 0 auto;

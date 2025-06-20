@@ -232,4 +232,14 @@ VALUES   (
     108247,
     'White',
     5
-  );
+);
+
+-- Create a table for reviews
+
+CREATE TABLE IF NOT EXISTS public.reviews (
+  review_id SERIAL PRIMARY KEY,
+  inv_id INTEGER REFERENCES inventory(inv_id),
+  account_id INTEGER REFERENCES account(account_id),
+  review_text TEXT NOT NULL,
+  review_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

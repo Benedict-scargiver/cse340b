@@ -1,5 +1,35 @@
 <body>
   <main>
     <%- vehicleHtml %>
+
+    <section>
+      <h2>Reviews</h2>
+      <% if (reviews && reviews.length) { %>
+        <ul>
+          <% reviews.forEach(r => { %>
+            <li>
+              <strong><%= r.account_firstname %> <%= r.account_lastname %></strong>
+              (<%= new Date(r.review_date).toLocaleString() %>):<br>
+              <%= r.review_text %>
+            </li>
+          <% }) %>
+        </ul>
+      <% } else { %>
+        <p>No reviews yet.</p>
+      <% } %>
+    </section>
+
+    <% if (locals.loggedin) { %>
+      <section>
+        <form action="/reviews/add" method="post">
+          <input type="hidden" name="inv_id" value="<%= invId %>">
+          <label for="review_text">Add a review:</label>
+          <textarea name="review_text" id="review_text" required></textarea>
+          <button type="submit">Submit Review</button>
+        </form>
+      </section>
+    <% } else { %>
+      <p><a href="/account/login">Log in</a> to leave a review.</p>
+    <% } %>
   </main>
 </body>

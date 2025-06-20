@@ -1,5 +1,6 @@
 const invModel = require("../models/inventory-model")
 const utilities = require("../utilities/")
+const reviewModel = require("../models/review-model");
 
 const invCont = {}
 
@@ -41,14 +42,21 @@ invCont.buildDetailView = async function (req, res, next) {
       return res.status(404).render("inventory/detail", {
         title: "Vehicle Not Found",
         nav,
-        vehicleHtml: "<p>Vehicle not found.</p>"
+        vehicleHtml: "<p>Vehicle not found.</p>",
+        reviews: [],
+        invId
       });
     }
     const vehicleHtml = utilities.buildDetailHtml(vehicle);
+
+    const reviews = await reviewModel.getReviewsByInvId(invId);
+
     res.render("inventory/detail", {
       title: `${vehicle.inv_year} ${vehicle.inv_make} ${vehicle.inv_model}`,
       nav,
-      vehicleHtml
+      vehicleHtml,
+      reviews, 
+      invId    
     });
   } catch (err) {
     next(err);

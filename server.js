@@ -20,6 +20,7 @@ const accountRoute = require("./routes/accountRoute");
 const bodyParser = require("body-parser")
 const flash = require("connect-flash")
 const cookieParser = require("cookie-parser")
+const reviewRoute = require("./routes/reviewRoute");
  
 
 /* ***********************
@@ -60,6 +61,7 @@ app.use(function(req, res, next){
   next()
 })
 
+app.use("/reviews", reviewRoute);
 
 
 /* ***********************
